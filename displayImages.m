@@ -1,10 +1,12 @@
-function displayImages(c0, c1, c0_p, c1_p)
+function displayImages(c0, c1, c0_p, c1_p, fn)
 %Function displays the 2 images in a subplot with corresponding points
 %   c0: image 1
 %   c1: image 2
 %   c0_p: point to plot in image 1
 %   c1_p: point to plot in image 2
 
+h = figure;
+set(h, 'Visible', 'off');
 subplot(1, 2, 1), subimage(c0);
 hold on
 plot(c0_p(1), c0_p(2), 'g*'),
@@ -18,6 +20,12 @@ else
     plot(size(c1, 2) / 2, size(c1, 1) / 2, 'rx', 'MarkerSize', 65);
 end
 hold off
+
+filename = [sprintf('%03d',fn) '.jpg'];
+fullname = fullfile('images',filename);
+saveas(h, fullname);
+close(h);
+
 drawnow;
 end
 

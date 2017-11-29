@@ -16,11 +16,14 @@ splitX1 = 320;
 splitX2 = 960;
 
 %Mean-shift vars
-p1 = [484 135];
+p1 = [490 143];
 bins = 16;
 h = 25;
 r = 6; %8 min for X1 1 run build
 is_start = 1;
+
+mkdir images
+fc = 1;
 
 while hasFrame(raw)
     img = readFrame(raw);
@@ -41,6 +44,20 @@ while hasFrame(raw)
         c1 = c2;
         p2 = calcPoint(p1', H2);
     end
-    displayImages(cmain, c1, p1, p2);
-    drawnow;
+    displayImages(cmain, c1, p1, p2, fc);
+    fc = fc + 1;
 end
+
+imageNames = dir(fullfile('images','*.jpg'));
+imageNames = {imageNames.name}';
+
+outputVideo = VideoWriter(fullfile('van_out'));
+outputVideo.FrameRate = vanRaw.FrameRate;
+open(outputVideo)
+
+for ii = 1:length(imageNames)
+   img = imread(fullfile('images',imageNames{ii}));
+   writeVideo(outputVideo,img)
+end
+
+close(outputVideo)
